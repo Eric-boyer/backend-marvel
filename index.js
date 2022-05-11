@@ -45,17 +45,14 @@ app.get(" /comics/:characterId", async (req, res) => {
   res.json(response.data);
 });
 app.get("/characters", async (req, res) => {
-try {
+  try {
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${ApiKey}`
-      );
-      res.json(response.data);
-    
-} catch (error) {
-    console.log(error.response)
-}
-
-
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.log(error.response);
+  }
 });
 app.get("/character/:characterId", async (req, res) => {
   const id = req.params.characterId;
@@ -65,7 +62,6 @@ app.get("/character/:characterId", async (req, res) => {
   res.json(response.data);
 });
 
-console.log(ApiKey);
 app.all("*", function (req, res) {
   res.json({ message: "Page not found" });
 });
