@@ -10,7 +10,7 @@ app.use(cors());
 app.use(formidable());
 app.use(morgan("dev"));
 
-const ApiKey = "G2BCbDAcAmkGfwrY";
+const ApiKey = process.env.ApiKey;
 
 app.get("/comics", async (req, res) => {
   try {
@@ -63,6 +63,6 @@ app.all("*", function (req, res) {
   res.json({ message: "Page not found" });
 });
 //conso
-app.listen(4001, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });
