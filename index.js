@@ -10,34 +10,25 @@ app.use(cors());
 app.use(formidable());
 app.use(morgan("dev"));
 
+require("dotenv").config();
+
 const ApiKey = process.env.ApiKey;
 
 app.get("/comics", async (req, res) => {
   try {
-    let limit = 100;
-    let page = 1;
-    if (req.query.page < 1) {
-      page = 1;
-    } else {
-      page = req.query.page;
-    }
-
-    let skip = (page - 1) * limit;
-
-    let title;
-    if (req.query.title) {
-      title = req.query.title;
-    }
-
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${ApiKey}&limit=${limit}&page=${page}&skip=${skip}&title=${title}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${ApiKey}&title=${req.query}&page=${req.query.page}&name=${req.query}&skip=${req.query.skip}`
     );
     res.json(response.data);
+
+    console.log("COMICS ROUTE !!!");
+    //console.log(response.data);
+    // console.log(req.query.title);
   } catch (error) {
     console.log(error.response);
   }
 });
-app.get(" /comics/:characterId", async (req, res) => {
+app.get("/comics/:characterId", async (req, res) => {
   const charactereId = req.params.characterId;
   const response = await axios.get(
     `https://lereacteur-marvel-api.herokuapp.com/comics/${charactereId}?apiKey=${ApiKey}`
@@ -46,8 +37,9 @@ app.get(" /comics/:characterId", async (req, res) => {
 });
 app.get("/characters", async (req, res) => {
   try {
+    const { name, skip } = req.query;
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${ApiKey}`
+      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${ApiKey}&name=${name}&skip=${skip}`
     );
     res.json(response.data);
   } catch (error) {
@@ -61,11 +53,14 @@ app.get("/character/:characterId", async (req, res) => {
   );
   res.json(response.data);
 });
+app.get("/", async (req, res) => {
+  res.json("welcome to my backend");
+});
 
 app.all("*", function (req, res) {
   res.json({ message: "Page not found" });
 });
-//conso
+
 app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });
