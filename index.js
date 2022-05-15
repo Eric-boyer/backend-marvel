@@ -16,14 +16,15 @@ const ApiKey = process.env.ApiKey;
 
 app.get("/comics", async (req, res) => {
   try {
+      const {title,skip} = req.query
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${ApiKey}&title=${req.query}&page=${req.query.page}&name=${req.query}&skip=${req.query.skip}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${ApiKey}&title=${title}&skip=${skip}`
     );
     res.json(response.data);
 
-    console.log("COMICS ROUTE !!!");
-    //console.log(response.data);
-    // console.log(req.query.title);
+    
+   // console.log(response.data);
+     //console.log(req.query.title);
   } catch (error) {
     console.log(error.response);
   }
